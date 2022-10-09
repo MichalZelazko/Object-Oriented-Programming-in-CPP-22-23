@@ -4,7 +4,7 @@
 
 typedef struct{
 	int top;
-	int size;
+	size_t size;
 	int* items;
 } Stack;
 

@@ -18,20 +18,21 @@ void destroy(Stack* s)
 void push(Stack* s, int element)
 {
 	if (s->top >= s->size) {
-		int newSize;
+		size_t newSize;
 		if (s->size == 0) {
 			newSize = 2;
 		}
 		else {
 			newSize = s->size * 2;
 		}
-		int* newItems = realloc(s->items, newSize);
+		int* newItems = realloc(s->items, newSize * sizeof(int));
 		if (newItems) {
 			s->items = newItems;
-			printf("Stack size updated: %d -> %d\n", s->size, newSize);
+			printf("Stack size updated: %zu -> %zu\n", s->size, newSize);
 		}
 		else {
 			printf("Error during expanding the stack. Aborting\n");
+			free(s->items);
 			abort();
 		}
 		s->size = newSize;
@@ -43,6 +44,7 @@ int pop(Stack* s)
 {
 	if (s->top == 0) {
 		printf("Stack is empty. Aborting\n");
+		free(s->items);
 		abort();
 	}
 	return s->items[--s->top];
