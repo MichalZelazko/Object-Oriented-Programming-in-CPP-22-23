@@ -1,61 +1,63 @@
 #include "Stack.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 void init(Stack* s)
 {
-	s->top = 0;
-	s->size = 0;
-	s->items = 0;
+    s->top = 0;
+    s->size = 0;
+    s->items = 0;
 }
 
 void destroy(Stack* s)
 {
-	free(s->items);
+    free(s->items);
 }
 
 void push(Stack* s, int element)
 {
-	if (s->top >= s->size) {
-		size_t newSize;
-		if (s->size == 0) {
-			newSize = 2;
-		}
-		else {
-			newSize = s->size * 2;
-		}
-		int* newItems = realloc(s->items, newSize * sizeof(int));
-		if (newItems) {
-			s->items = newItems;
-			printf("Stack size updated: %zu -> %zu\n", s->size, newSize);
-		}
-		else {
-			printf("Error during expanding the stack. Aborting\n");
-			free(s->items);
-			abort();
-		}
-		s->size = newSize;
-	}
-	s->items[s->top++] = element;
+    if (s->top >= s->size) {
+        size_t newSize = resize(s);
+        int* newItems = realloc(s->items, newSize * sizeof(int));
+        if (newItems) {
+            s->items = newItems;
+        }
+        else {
+            printf("Error during expanding the stack. Aborting\n");
+            destroy(s);
+            exit(1);
+        }
+        s->size = newSize;
+    }
+    s->items[s->top++] = element;
 }
 
 int pop(Stack* s)
 {
-	if (s->top == 0) {
-		printf("Stack is empty. Aborting\n");
-		free(s->items);
-		abort();
-	}
-	return s->items[--s->top];
+    if (isEmpty(s)) {
+        printf("Stack is empty. Aborting\n");
+        destroy(s);
+        exit(1);
+    }
+    return s->items[--s->top];
 }
 
 bool isEmpty(Stack* s)
 {
-	if (s->top == 0) {
-		return true;
-	}
-	else {
-		return false;
-	}
+    if (s->top == 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+size_t resize(Stack* s)
+{
+    size_t newSize;
+    if (s->size == 0) {
+        newSize = 2;
+    }
+    else {
+        newSize = s->size * 2;
+    }
+    return newSize;
 }
