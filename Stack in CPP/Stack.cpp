@@ -34,7 +34,6 @@ void Stack::push(int element){
         int* newItems = (int*)realloc(this->items, newSize * sizeof(int));
         if(newItems){
             this->items = newItems;
-            cout << "Stack size updated " << this->size << " -> " << newSize << endl;
             this->size = newSize;
         }else{
             cout << "Error reallocating memory. Aborting" << endl;

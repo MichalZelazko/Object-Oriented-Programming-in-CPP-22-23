@@ -5,7 +5,9 @@ using namespace std;
 int main(){
     Stack s1;
     Stack s2;
-    s1.isEmpty();
+    if(s1.isEmpty()){
+        cout << "Stack is empty. Test successful" << endl;
+    }
     s1.push(1);
     s1.push(2);
     s1.push(3);
