@@ -15,6 +15,12 @@ Stack::~Stack()
 	free(this->items);
 }
 
+Stack::Stack(Stack& s){
+    this->top = s.top;
+    this->size = s.size;
+    this->items = s.items;
+}
+
 bool Stack::isEmpty()
 {
 	return (this->top == 0);
