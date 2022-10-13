@@ -22,8 +22,7 @@ bool Stack::isEmpty()
 int Stack::pop(){
     if(this->isEmpty()){
         cout << "Stack is empty, cannot pop. Aborting" << endl;
-        this->~Stack();
-        exit(1);
+        abort();
     }
     return this->items[--this->top];
 }
@@ -37,8 +36,7 @@ void Stack::push(int element){
             this->size = newSize;
         }else{
             cout << "Error reallocating memory. Aborting" << endl;
-            this->~Stack();
-            exit(1);
+            abort();
         }
     }
     this->items[this->top++] = element;
