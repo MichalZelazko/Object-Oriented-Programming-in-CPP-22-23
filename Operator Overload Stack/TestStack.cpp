@@ -9,7 +9,8 @@ int main(){
     s1.push(1);
     s1.push(2);
     s1.push(3);
-    Stack s2 = s1;
+    Stack s2;
+    s2 = s1;
     cout << s2.pop();
     return 0;
 }

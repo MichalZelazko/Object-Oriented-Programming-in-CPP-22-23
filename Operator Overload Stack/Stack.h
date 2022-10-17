@@ -3,7 +3,8 @@
 class Stack{
     public:
         Stack();
-        Stack(Stack& s);
+        Stack(const Stack& s);
+        Stack& operator=(const Stack& s);
         ~Stack();
         void push(int element);
         int pop();
@@ -12,4 +13,5 @@ class Stack{
         int top;
         size_t size;
         int* items;
+        size_t resize();
 };
