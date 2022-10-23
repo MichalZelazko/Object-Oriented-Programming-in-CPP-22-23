@@ -9,6 +9,7 @@ class Stack{
         void push(int element);
         int pop();
         bool isEmpty();
+        void printInfo();
     private:
         int top;
         size_t size;
