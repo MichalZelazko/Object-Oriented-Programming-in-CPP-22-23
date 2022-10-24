@@ -34,6 +34,18 @@ int main(){
     cout << "Stack 4 info after assignment operator from Stack 1:\n----------------------------------------" << endl;
     s4.printInfo();
     
+    Stack s5;
+    s5.push(4);
+    s5.push(5);
+    s5.push(6);
+    s5.push(7);
+    s5.push(8);
+    cout << "Stack 5 info after usual constructor and 5 pushes:\n----------------------------------------" << endl;
+    s5.printInfo();
+    s5 = s1;
+    cout << "Stack 5 info after assignment operator from Stack 1:\n----------------------------------------" << endl;
+    s5.printInfo();
+    
     passToPrintViaReference(s1);
     passToPrintViaValue(s1);
     return 0;
