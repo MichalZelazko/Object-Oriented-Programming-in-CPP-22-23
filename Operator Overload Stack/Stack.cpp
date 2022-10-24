@@ -32,21 +32,27 @@ Stack::Stack(const Stack& s)
 }
 
 Stack& Stack::operator=(const Stack& s) {
-    cout << "\nAssignment operator called" << endl;
-    if(this != &s)
-    {
+    if (this == &s) {
+        cout << "Assignment was called between the same object" << endl;
+		return *this;
+	}
+	if (this->size < s.size) {
         cout << "Assignment was called between different objects" << endl;
-        free(this->items);
-        this->top = s.top;
-        if(this->size < s.size){
-            this->size = s.size;
+		free(this->items);
+        this->size = s.size;
+        this->items = NULL;
+		this->items = (int*)realloc(this-> items, this->size * sizeof(int));
+        if (this->items == NULL) {
+            cout << "Error reallocating memory. Aborting..." << endl;
+            abort();
         }
-        this->items = (int*)realloc(this->items, this->size * sizeof(int));
-        for (int i = 0; i < this->top; i++) {
-            this->items[i] = s.items[i];
-        }
+	}
+    this->top = s.top;
+    for (int i = 0; i < this->top; i++) {
+        this->items[i] = s.items[i];
     }
-    return *this;
+	return *this;
+    
 }
 
 bool Stack::isEmpty()
@@ -57,7 +63,7 @@ bool Stack::isEmpty()
 int Stack::pop()
 {
     if (this->isEmpty()) {
-        cout << "Stack is empty, cannot pop. Aborting" << endl;
+        cout << "Stack is empty, cannot pop. Aborting..." << endl;
         abort();
     }
     return this->items[--this->top];
@@ -73,7 +79,7 @@ void Stack::push(int element)
             this->size = newSize;
         }
         else {
-            cout << "Error reallocating memory. Aborting" << endl;
+            cout << "Error reallocating memory. Aborting..." << endl;
             abort();
         }
     }
