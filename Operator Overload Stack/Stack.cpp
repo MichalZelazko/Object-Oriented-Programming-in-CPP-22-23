@@ -1,6 +1,6 @@
 #include "Stack.h"
-#include <iostream>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
@@ -24,38 +24,40 @@ Stack::Stack(const Stack& s)
     this->size = s.size;
     this->items = NULL;
     this->items = (int*)realloc(this->items, this->size * sizeof(int));
-    size_t i = 0;
-    while(s.items[i]){
+    if (this->items == NULL) {
+        cout << "Error reallocating memory. Aborting..." << endl;
+        abort();
+    }
+    for (int i = 0; i < this->top; i++) {
         this->items[i] = s.items[i];
-        i++;
     }
 }
 
-Stack& Stack::operator=(const Stack& s) {
+Stack& Stack::operator=(const Stack& s)
+{
     if (this == &s) {
         cout << "Assignment was called between the same object" << endl;
-		return *this;
-	}
-	if (this->size < s.size) {
+        return *this;
+    }
+    if ((int)this->size < s.top) {
         cout << "Assignment was called between different objects" << endl;
-		free(this->items);
+        free(this->items);
         this->size = s.size;
         this->items = NULL;
-		this->items = (int*)realloc(this-> items, this->size * sizeof(int));
+        this->items = (int*)realloc(this->items, this->size * sizeof(int));
         if (this->items == NULL) {
             cout << "Error reallocating memory. Aborting..." << endl;
             abort();
         }
-	}
+    }
     this->top = s.top;
     for (int i = 0; i < this->top; i++) {
         this->items[i] = s.items[i];
     }
-	return *this;
-    
+    return *this;
 }
 
-bool Stack::isEmpty()
+bool Stack::isEmpty() const
 {
     return (this->top == 0);
 }
@@ -98,12 +100,11 @@ size_t Stack::resize()
     return newSize;
 }
 
-void Stack::printInfo()
+void Stack::printInfo() const
 {
     cout << "Size: " << this->size << endl;
     cout << "Top: " << this->top << endl;
-    for(int i = 0; i < this->top; i++){
+    for (int i = 0; i < this->top; i++) {
         cout << "Element " << i << " : " << this->items[i] << endl;
     }
 }
-
