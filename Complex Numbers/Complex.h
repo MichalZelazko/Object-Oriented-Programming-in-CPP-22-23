@@ -1,5 +1,5 @@
-#pragma once
-#include <stdlib>
+#include <stdlib.h>
+#include <math.h>
 
 class ComplexNumber{
     public:
@@ -11,7 +11,7 @@ class ComplexNumber{
         double getImaginaryPart();
         void setRealPart(float newReal);
         void setImaginaryPart(float newImaginary);
-        ComplexNumber(const Stack& c);
+        ComplexNumber(const ComplexNumber& c);
         ComplexNumber& operator=(const ComplexNumber& c);
         ComplexNumber operator+(const ComplexNumber& c);
         ComplexNumber operator-(const ComplexNumber& c);
@@ -21,10 +21,10 @@ class ComplexNumber{
         ComplexNumber& operator-=(const ComplexNumber& c);
         ComplexNumber& operator*=(const ComplexNumber& c);
         ComplexNumber& operator/=(const ComplexNumber& c);
-        ostream& operator<<
+        //ostream& operator<<(const ComplexNumber& c);
         bool operator==(const ComplexNumber& c);
         bool operator!=(const ComplexNumber& c);
     private:
         double real;
         double imaginary;
-}
+};

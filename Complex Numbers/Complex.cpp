@@ -1,5 +1,4 @@
 #include "Complex.h"
-#include <math.h>
 
 ComplexNumber::ComplexNumber()
 {
@@ -19,7 +18,7 @@ ComplexNumber::ComplexNumber(double real, double imaginary)
 	this->imaginary = imaginary;
 }
 
-ComplexNumber::~ComplexNumber();
+ComplexNumber::~ComplexNumber(){}
 
 void ComplexNumber::setImaginaryPart(float newImaginary)
 {
@@ -49,7 +48,7 @@ ComplexNumber::ComplexNumber(const ComplexNumber& c){
 ComplexNumber& ComplexNumber::operator=(const ComplexNumber& c){
     this->real = c.real;
     this->imaginary = c.imaginary;
-    return this*;
+    return *this;
 }
 
 ComplexNumber ComplexNumber::operator+(const ComplexNumber& c)
@@ -74,4 +73,50 @@ ComplexNumber ComplexNumber::operator/(const ComplexNumber& c)
     result.setRealPart((this->real*c.real+this->imaginary*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2));
     result.setImaginaryPart((this->imaginary*c.real-this->real*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2));
     return result;
+}
+
+ComplexNumber& ComplexNumber::operator+=(const ComplexNumber& c)
+{
+	this->real = this->real + c.real;
+    this->imaginary = this->imaginary + c.imaginary;
+    return *this;
+}
+
+ComplexNumber& ComplexNumber::operator-=(const ComplexNumber& c)
+{
+	this->real = this->real - c.real;
+    this->imaginary = this->imaginary - c.imaginary;
+    return *this;
+}
+
+ComplexNumber& ComplexNumber::operator*=(const ComplexNumber& c)
+{
+	this->real = this->real * c.real - this->imaginary * c.imaginary;
+    this->imaginary = this->real * c.imaginary + this->imaginary * c.real;
+    return *this;
+}
+
+ComplexNumber& ComplexNumber::operator/=(const ComplexNumber& c)
+{
+	this->real = (this->real*c.real+this->imaginary*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2);
+    this->imaginary = (this->imaginary*c.real-this->real*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2);
+    return *this;
+}
+
+bool ComplexNumber::operator==(const ComplexNumber& c)
+{
+    if((this->real==c.real)&&(this->imaginary==c.imaginary)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+bool ComplexNumber::operator!=(const ComplexNumber& c)
+{
+    if((this->real!=c.real)||(this->imaginary!=c.imaginary)){
+        return true;
+    }else{
+        return false;
+    }
 }
