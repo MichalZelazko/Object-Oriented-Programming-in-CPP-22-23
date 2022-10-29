@@ -1,3 +1,5 @@
+#pragma once
+#include <iostream>
 #include <stdlib.h>
 #include <math.h>
 
@@ -21,10 +23,11 @@ class ComplexNumber{
         ComplexNumber& operator-=(const ComplexNumber& c);
         ComplexNumber& operator*=(const ComplexNumber& c);
         ComplexNumber& operator/=(const ComplexNumber& c);
-        //ostream& operator<<(const ComplexNumber& c);
         bool operator==(const ComplexNumber& c);
         bool operator!=(const ComplexNumber& c);
+        friend std::ostream& operator<<(std::ostream& s, const ComplexNumber& c);
     private:
         double real;
         double imaginary;
 };
+

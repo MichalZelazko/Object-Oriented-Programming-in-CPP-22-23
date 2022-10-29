@@ -1,5 +1,7 @@
 #include "Complex.h"
 
+using namespace std;
+
 ComplexNumber::ComplexNumber()
 {
 	this->real = 0;
@@ -101,6 +103,17 @@ ComplexNumber& ComplexNumber::operator/=(const ComplexNumber& c)
 	this->real = (this->real*c.real+this->imaginary*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2);
     this->imaginary = (this->imaginary*c.real-this->real*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2);
     return *this;
+}
+
+ostream& operator<<(ostream& s, const ComplexNumber& c){
+    if(c.imaginary < 0){
+        s << c.real << " - " << abs(c.imaginary) << "i" << endl;
+    } else if(c.imaginary==0){
+        s << c.real << endl;
+    } else {
+        s << c.real << " + " << c.imaginary << "i" << endl;
+    }
+    return s;
 }
 
 bool ComplexNumber::operator==(const ComplexNumber& c)
