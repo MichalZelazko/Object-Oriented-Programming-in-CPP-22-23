@@ -4,7 +4,7 @@
 using namespace std;
 
 void passToPrintViaValue(Stack s);
-void passToPrintViaReference(Stack& s);
+void passToPrintViaReference(const Stack& s);
 
 int main(){
     Stack s1;
@@ -56,7 +56,7 @@ void passToPrintViaValue(Stack s){
     s.printInfo();
 }
 
-void passToPrintViaReference(Stack& s){
+void passToPrintViaReference(const Stack& s){
     cout << "\n\nPassing stack by reference" << endl;
     s.printInfo();
 }

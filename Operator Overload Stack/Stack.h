@@ -8,8 +8,8 @@ class Stack{
         ~Stack();
         void push(int element);
         int pop();
-        bool isEmpty();
-        void printInfo();
+        bool isEmpty() const;
+        void printInfo() const;
     private:
         int top;
         size_t size;
