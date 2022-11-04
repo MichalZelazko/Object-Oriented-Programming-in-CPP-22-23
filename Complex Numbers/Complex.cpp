@@ -20,7 +20,7 @@ ComplexNumber::ComplexNumber(double real, double imaginary)
 	this->imaginary = imaginary;
 }
 
-ComplexNumber::~ComplexNumber(){}
+ComplexNumber::~ComplexNumber() {}
 
 void ComplexNumber::setImaginaryPart(float newImaginary)
 {
@@ -42,15 +42,17 @@ double ComplexNumber::getRealPart()
 	return this->real;
 }
 
-ComplexNumber::ComplexNumber(const ComplexNumber& c){
-    this->real = c.real;
-    this->imaginary = c.imaginary;
+ComplexNumber::ComplexNumber(const ComplexNumber& c)
+{
+	this->real = c.real;
+	this->imaginary = c.imaginary;
 }
 
-ComplexNumber& ComplexNumber::operator=(const ComplexNumber& c){
-    this->real = c.real;
-    this->imaginary = c.imaginary;
-    return *this;
+ComplexNumber& ComplexNumber::operator=(const ComplexNumber& c)
+{
+	this->real = c.real;
+	this->imaginary = c.imaginary;
+	return *this;
 }
 
 ComplexNumber ComplexNumber::operator+(const ComplexNumber& c)
@@ -71,65 +73,95 @@ ComplexNumber ComplexNumber::operator*(const ComplexNumber& c)
 
 ComplexNumber ComplexNumber::operator/(const ComplexNumber& c)
 {
-    ComplexNumber result;
-    result.setRealPart((this->real*c.real+this->imaginary*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2));
-    result.setImaginaryPart((this->imaginary*c.real-this->real*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2));
-    return result;
+	ComplexNumber result;
+	result.setRealPart((this->real * c.real + this->imaginary * c.imaginary) /
+						   pow(c.real, 2) +
+					   pow(c.imaginary, 2));
+	result.setImaginaryPart(
+		(this->imaginary * c.real - this->real * c.imaginary) / pow(c.real, 2) +
+		pow(c.imaginary, 2));
+	return result;
 }
 
 ComplexNumber& ComplexNumber::operator+=(const ComplexNumber& c)
 {
 	this->real = this->real + c.real;
-    this->imaginary = this->imaginary + c.imaginary;
-    return *this;
+	this->imaginary = this->imaginary + c.imaginary;
+	return *this;
 }
 
 ComplexNumber& ComplexNumber::operator-=(const ComplexNumber& c)
 {
 	this->real = this->real - c.real;
-    this->imaginary = this->imaginary - c.imaginary;
-    return *this;
+	this->imaginary = this->imaginary - c.imaginary;
+	return *this;
 }
 
 ComplexNumber& ComplexNumber::operator*=(const ComplexNumber& c)
 {
 	this->real = this->real * c.real - this->imaginary * c.imaginary;
-    this->imaginary = this->real * c.imaginary + this->imaginary * c.real;
-    return *this;
+	this->imaginary = this->real * c.imaginary + this->imaginary * c.real;
+	return *this;
 }
 
 ComplexNumber& ComplexNumber::operator/=(const ComplexNumber& c)
 {
-	this->real = (this->real*c.real+this->imaginary*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2);
-    this->imaginary = (this->imaginary*c.real-this->real*c.imaginary)/pow(c.real, 2)+pow(c.imaginary, 2);
-    return *this;
+	this->real =
+		(this->real * c.real + this->imaginary * c.imaginary) / pow(c.real, 2) +
+		pow(c.imaginary, 2);
+	this->imaginary =
+		(this->imaginary * c.real - this->real * c.imaginary) / pow(c.real, 2) +
+		pow(c.imaginary, 2);
+	return *this;
 }
 
-ostream& operator<<(ostream& s, const ComplexNumber& c){
-    if(c.imaginary < 0){
-        s << c.real << " - " << abs(c.imaginary) << "i" << endl;
-    } else if(c.imaginary==0){
-        s << c.real << endl;
-    } else {
-        s << c.real << " + " << c.imaginary << "i" << endl;
-    }
-    return s;
+ostream& operator<<(ostream& s, const ComplexNumber& c)
+{
+	if (c.imaginary < 0) {
+		s << c.real << " - " << abs(c.imaginary) << "i" << endl;
+	}
+	else if (c.imaginary == 0) {
+		s << c.real << endl;
+	}
+	else {
+		s << c.real << " + " << c.imaginary << "i" << endl;
+	}
+	return s;
 }
 
 bool ComplexNumber::operator==(const ComplexNumber& c)
 {
-    if((this->real==c.real)&&(this->imaginary==c.imaginary)){
-        return true;
-    }else{
-        return false;
-    }
+	if ((this->real == c.real) && (this->imaginary == c.imaginary)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 bool ComplexNumber::operator!=(const ComplexNumber& c)
 {
-    if((this->real!=c.real)||(this->imaginary!=c.imaginary)){
-        return true;
+	if ((this->real != c.real) || (this->imaginary != c.imaginary)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+double ComplexNumber::magnitude(const ComplexNumber& c)
+{
+	return(sqrt(pow(this->real, 2) + pow(this->imaginary, 2)));
+}
+
+double ComplexNumber::phase(const ComplexNumber& c)
+{
+    if(this->imaginary != 0 || this->real > 0){
+        return(2*atan(this->imaginary / (this->magnitude(*this) + this->real)));
+    }else if(this->real < 0 && this->imaginary == 0){
+        return M_PI;
     }else{
-        return false;
+        cout << "Cannot calculate phase for 0 + 0i" << endl;
+        return 0;
     }
 }

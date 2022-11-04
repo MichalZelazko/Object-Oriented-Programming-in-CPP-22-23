@@ -26,6 +26,8 @@ class ComplexNumber{
         bool operator==(const ComplexNumber& c);
         bool operator!=(const ComplexNumber& c);
         friend std::ostream& operator<<(std::ostream& s, const ComplexNumber& c);
+        double magnitude(const ComplexNumber& c);
+        double phase(const ComplexNumber& c);
     private:
         double real;
         double imaginary;
