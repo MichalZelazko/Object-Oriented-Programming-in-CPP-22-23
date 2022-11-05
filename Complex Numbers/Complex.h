@@ -11,8 +11,8 @@ class ComplexNumber{
         ~ComplexNumber();
         double getRealPart();
         double getImaginaryPart();
-        void setRealPart(float newReal);
-        void setImaginaryPart(float newImaginary);
+        void setRealPart(double newReal);
+        void setImaginaryPart(double newImaginary);
         ComplexNumber(const ComplexNumber& c);
         ComplexNumber& operator=(const ComplexNumber& c);
         ComplexNumber operator+(const ComplexNumber& c);
@@ -26,8 +26,8 @@ class ComplexNumber{
         bool operator==(const ComplexNumber& c);
         bool operator!=(const ComplexNumber& c);
         friend std::ostream& operator<<(std::ostream& s, const ComplexNumber& c);
-        double magnitude(const ComplexNumber& c);
-        double phase(const ComplexNumber& c);
+        double magnitude();
+        double phase();
     private:
         double real;
         double imaginary;
