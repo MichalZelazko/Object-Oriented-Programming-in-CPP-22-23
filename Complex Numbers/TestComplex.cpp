@@ -109,9 +109,7 @@ void testMagnitudeAndPhase()
 		cout << "Magnitude test passed" << endl;
 	}
 	double phaseResult = 0.927295;
-	cout << "c1.phase() = " << c1.phase()
-		 << ", calculator result = " << phaseResult << endl;
-	if (c2.phase() == M_PI) {
+	if (c1.phase() - phaseResult < 0.000001 && c2.phase() == M_PI) {
 		cout << "Phase test passed" << endl;
 	}
 }
