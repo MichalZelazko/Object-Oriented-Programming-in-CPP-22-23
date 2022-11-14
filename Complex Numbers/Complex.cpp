@@ -2,18 +2,6 @@
 
 using namespace std;
 
-ComplexNumber::ComplexNumber()
-{
-	this->real = 0;
-	this->imaginary = 0;
-}
-
-ComplexNumber::ComplexNumber(double real)
-{
-	this->real = real;
-	this->imaginary = 0;
-}
-
 ComplexNumber::ComplexNumber(double real, double imaginary)
 {
 	this->real = real;
@@ -22,22 +10,22 @@ ComplexNumber::ComplexNumber(double real, double imaginary)
 
 ComplexNumber::~ComplexNumber() {}
 
-void ComplexNumber::setImaginaryPart(double newImaginary)
+void ComplexNumber::setImaginary(double newImaginary)
 {
 	this->imaginary = newImaginary;
 }
 
-void ComplexNumber::setRealPart(double newReal)
+void ComplexNumber::setReal(double newReal)
 {
 	this->real = newReal;
 }
 
-double ComplexNumber::getImaginaryPart()
+double ComplexNumber::getImaginary()
 {
 	return this->imaginary;
 }
 
-double ComplexNumber::getRealPart()
+double ComplexNumber::getReal()
 {
 	return this->real;
 }
@@ -55,32 +43,34 @@ ComplexNumber& ComplexNumber::operator=(const ComplexNumber& c)
 	return *this;
 }
 
-ComplexNumber ComplexNumber::operator+(const ComplexNumber& c)
+ComplexNumber operator+(ComplexNumber c1, ComplexNumber c2)
 {
-	return ComplexNumber(this->real + c.real, this->imaginary + c.imaginary);
+    double newReal = c1.getReal() + c2.getReal();
+    double newImaginary = c1.getImaginary() + c2.getImaginary();
+    c1.setReal(newReal);
+    c1.setImaginary(newImaginary);
+	return c1;
 }
 
-ComplexNumber ComplexNumber::operator-(const ComplexNumber& c)
+ComplexNumber operator-(ComplexNumber c1, ComplexNumber c2)
 {
-	return ComplexNumber(this->real - c.real, this->imaginary - c.imaginary);
+	double newReal = c1.getReal() - c2.getReal();
+    double newImaginary = c1.getImaginary() - c2.getImaginary();
+    c1.setReal(newReal);
+    c1.setImaginary(newImaginary);
+	return c1;
 }
 
-ComplexNumber ComplexNumber::operator*(const ComplexNumber& c)
+ComplexNumber operator*(ComplexNumber c1, ComplexNumber c2)
 {
-	return ComplexNumber(this->real * c.real - this->imaginary * c.imaginary,
-						 this->real * c.imaginary + this->imaginary * c.real);
+    c1 *= c2;
+	return c1;
 }
 
-ComplexNumber ComplexNumber::operator/(const ComplexNumber& c)
+ComplexNumber operator/(ComplexNumber c1, ComplexNumber c2)
 {
-	ComplexNumber result;
-	result.setRealPart((this->real * c.real + this->imaginary * c.imaginary) /
-						   (pow(c.real, 2) +
-					   pow(c.imaginary, 2)));
-	result.setImaginaryPart(
-		(this->imaginary * c.real - this->real * c.imaginary) / (pow(c.real, 2) +
-		pow(c.imaginary, 2)));
-	return result;
+    c1 /= c2;
+	return c1;
 }
 
 ComplexNumber& ComplexNumber::operator+=(const ComplexNumber& c)
@@ -100,42 +90,45 @@ ComplexNumber& ComplexNumber::operator-=(const ComplexNumber& c)
 ComplexNumber& ComplexNumber::operator*=(const ComplexNumber& c)
 {
     ComplexNumber aux;
-    aux.setRealPart(this->real * c.real - this->imaginary * c.imaginary);
-	aux.setImaginaryPart(this->imaginary = this->real * c.imaginary + this->imaginary * c.real);
-    this->real = aux.getRealPart();
-    this->imaginary = aux.getImaginaryPart();
+    aux.setReal(this->real * c.real - this->imaginary * c.imaginary);
+	aux.setImaginary(this->imaginary = this->real * c.imaginary + this->imaginary * c.real);
+    this->real = aux.getReal();
+    this->imaginary = aux.getImaginary();
 	return *this;
 }
 
 ComplexNumber& ComplexNumber::operator/=(const ComplexNumber& c)
 {
     ComplexNumber aux;
-	aux.setRealPart((this->real * c.real + this->imaginary * c.imaginary) / (pow(c.real, 2) +
+	aux.setReal((this->real * c.real + this->imaginary * c.imaginary) / (pow(c.real, 2) +
 		pow(c.imaginary, 2)));
-	aux.setImaginaryPart((this->imaginary * c.real - this->real * c.imaginary) / (pow(c.real, 2) +
+	aux.setImaginary((this->imaginary * c.real - this->real * c.imaginary) / (pow(c.real, 2) +
 		pow(c.imaginary, 2)));
-    this->real = aux.getRealPart();
-    this->imaginary = aux.getImaginaryPart();
+    this->real = aux.getReal();
+    this->imaginary = aux.getImaginary();
 	return *this;
 }
 
-ostream& operator<<(ostream& s, const ComplexNumber& c)
+ostream& operator<<(ostream& s, ComplexNumber c)
 {
-	if (c.imaginary < 0) {
-		s << c.real << " - " << abs(c.imaginary) << "i" << endl;
+	if (c.getImaginary() < 0) {
+		s << c.getReal() << " - " << abs(c.getImaginary()) << "i" << endl;
 	}
-	else if (c.imaginary == 0) {
-		s << c.real << endl;
+	else if (c.getImaginary() == 0) {
+		s << c.getReal() << endl;
 	}
+    else if (c.getReal() == 0) {
+        s << c.getImaginary() << "i" << endl;
+    }
 	else {
-		s << c.real << " + " << c.imaginary << "i" << endl;
+		s << c.getReal() << " + " << c.getImaginary() << "i" << endl;
 	}
 	return s;
 }
 
-bool ComplexNumber::operator==(const ComplexNumber& c)
+bool operator==(ComplexNumber c1, ComplexNumber c2)
 {
-	if ((this->real == c.real) && (this->imaginary == c.imaginary)) {
+	if ((c1.getReal() == c2.getReal()) && (c1.getImaginary() == c2.getImaginary())) {
 		return true;
 	}
 	else {
@@ -143,9 +136,9 @@ bool ComplexNumber::operator==(const ComplexNumber& c)
 	}
 }
 
-bool ComplexNumber::operator!=(const ComplexNumber& c)
+bool operator!=(ComplexNumber c1, ComplexNumber c2)
 {
-	if ((this->real != c.real) || (this->imaginary != c.imaginary)) {
+	if ((c1.getReal() != c2.getReal()) || (c1.getImaginary() != c2.getImaginary())) {
 		return true;
 	}
 	else {

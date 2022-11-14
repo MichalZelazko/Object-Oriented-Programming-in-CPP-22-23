@@ -3,29 +3,22 @@
 #include <stdlib.h>
 #include <math.h>
 
+using namespace std;
+
 class ComplexNumber{
     public:
-        ComplexNumber();
-        ComplexNumber(double real);
-        ComplexNumber(double real, double imaginary);
+        ComplexNumber(double real = 0, double imaginary = 0);
         ~ComplexNumber();
-        double getRealPart();
-        double getImaginaryPart();
-        void setRealPart(double newReal);
-        void setImaginaryPart(double newImaginary);
+        double getReal();
+        double getImaginary();
+        void setReal(double newReal);
+        void setImaginary(double newImaginary);
         ComplexNumber(const ComplexNumber& c);
         ComplexNumber& operator=(const ComplexNumber& c);
-        ComplexNumber operator+(const ComplexNumber& c);
-        ComplexNumber operator-(const ComplexNumber& c);
-        ComplexNumber operator*(const ComplexNumber& c);
-        ComplexNumber operator/(const ComplexNumber& c);
         ComplexNumber& operator+=(const ComplexNumber& c);
         ComplexNumber& operator-=(const ComplexNumber& c);
         ComplexNumber& operator*=(const ComplexNumber& c);
         ComplexNumber& operator/=(const ComplexNumber& c);
-        bool operator==(const ComplexNumber& c);
-        bool operator!=(const ComplexNumber& c);
-        friend std::ostream& operator<<(std::ostream& s, const ComplexNumber& c);
         double magnitude();
         double phase();
     private:
@@ -33,3 +26,10 @@ class ComplexNumber{
         double imaginary;
 };
 
+ComplexNumber operator+(ComplexNumber c1, ComplexNumber c2);
+ComplexNumber operator-(ComplexNumber c1, ComplexNumber c2);
+ComplexNumber operator*(ComplexNumber c1, ComplexNumber c2);
+ComplexNumber operator/(ComplexNumber c1, ComplexNumber c2);
+bool operator==(ComplexNumber c1, ComplexNumber c2);
+bool operator!=(ComplexNumber c1, ComplexNumber c2);
+ostream& operator<<(ostream& s, const ComplexNumber c);
