@@ -62,7 +62,9 @@ void Poly::removeZeroCoefficient(int index) {
 Poly& Poly::operator+=(const Poly& other){
     for (auto element = other.elements.begin(); element != other.elements.end(); element++) {
         this->elements[element->first] += element->second;
-        this->removeZeroCoefficient(element->first);
+        if(element->first != 0) {
+            this->removeZeroCoefficient(element->first);
+        }
     }
     return *this;
 }
@@ -74,7 +76,9 @@ Poly operator+(const Poly& p1, const Poly& p2) {
 Poly& Poly::operator-=(const Poly& other){
     for (auto element = other.elements.begin(); element != other.elements.end(); element++) {
         this->elements[element->first] -= element->second;
-        this->removeZeroCoefficient(element->first);
+        if(element->first != 0) {
+            this->removeZeroCoefficient(element->first);
+        }
     }
     return *this;
 }
@@ -83,23 +87,26 @@ Poly operator-(const Poly& p1, const Poly& p2) {
     return Poly(p1) -= p2;
 }
 
-Poly& Poly::operator*=(const Poly& p){
-    for (auto it = p.getElements().begin(); it != p.getElements().end(); it++) {
-        for (auto it2 = this->elements.begin(); it2 != this->elements.end(); it2++) {
-            this->elements[it->first + it2->first] += it->second * it2->second;
-            this->removeZeroCoefficient(it->first + it2->first);
+Poly operator*(const Poly& p1, const Poly& p2) {
+    Poly result;
+    for (auto element1: p1.getElements()) {
+        for (auto element2: p2.getElements()) {
+            result[element1.first + element2.first] += element1.second * element2.second;
+            if(element1.first + element2.first != 0) {
+                result.removeZeroCoefficient(element1.first + element2.first);
+            }
         }
     }
-    return *this;
-}
-
-Poly operator*(const Poly& p1, const Poly& p2) {
-    return Poly(p1) *= p2;
+    return result;
 }
 
 ostream& operator<<(ostream& os, const Poly& p) {
     map<int, double> elements = p.getElements();
-    auto it = elements.begin();
+    if (elements.size() == 1 && elements[0] == 0) {
+        os << "0";
+        return os;
+    }
+    auto it = elements.rbegin();
     if (it->second < 0) {
         os << "-";
     }
@@ -113,7 +120,7 @@ ostream& operator<<(ostream& os, const Poly& p) {
             auto aux_it = it;
             aux_it++;
             if(aux_it != elements.rend()) {
-                if(it->second > 0) {
+                if(aux_it->second > 0) {
                     os << "+ ";
                 } else {
                     os << "- ";

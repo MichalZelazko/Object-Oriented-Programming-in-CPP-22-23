@@ -17,9 +17,8 @@ class Poly{
         Poly(const Poly& p);
         map<int, double> getElements() const;
         Poly& operator=(const Poly& p);
-        Poly& operator+=(const Poly& other);
-        Poly& operator-=(const Poly& other);
-        Poly& operator*=(const Poly& other);
+        Poly& operator+=(const Poly& p);
+        Poly& operator-=(const Poly& p);
         Poly operator-() const;
         double operator()(double x) const;
         double& operator[](int index);
@@ -30,7 +29,6 @@ class Poly{
 Poly operator+(const Poly& p1, const Poly& p2);
 Poly operator-(const Poly& p1, const Poly& p2);
 Poly operator*(const Poly& p1, const Poly& p2);
-Poly operator/(const Poly& p1, const Poly& p2);
 ostream& operator<<(ostream& os, const Poly& p);
 
 void displayMap(map<int, double> elements);
