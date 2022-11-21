@@ -24,10 +24,6 @@ Poly::~Poly() {
     this->elements.clear();
 }
 
-map<int, double> Poly::getElements() const {
-    return this->elements;
-}
-
 Poly& Poly::operator=(const Poly& p) {
     this->elements = p.elements;
     return *this;
@@ -89,8 +85,8 @@ Poly operator-(const Poly& p1, const Poly& p2) {
 
 Poly operator*(const Poly& p1, const Poly& p2) {
     Poly result;
-    for (auto element1: p1.getElements()) {
-        for (auto element2: p2.getElements()) {
+    for (auto element1: p1.elements) {
+        for (auto element2: p2.elements) {
             result[element1.first + element2.first] += element1.second * element2.second;
             if(element1.first + element2.first != 0) {
                 result.removeZeroCoefficient(element1.first + element2.first);
@@ -101,7 +97,7 @@ Poly operator*(const Poly& p1, const Poly& p2) {
 }
 
 ostream& operator<<(ostream& os, const Poly& p) {
-    map<int, double> elements = p.getElements();
+    map<int, double> elements = p.elements;
     if (elements.size() == 1 && elements[0] == 0) {
         os << "0";
         return os;
