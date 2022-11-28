@@ -8,5 +8,15 @@ int main(){
     m1(0, 1) = 2;
     m1(1, 0) = 3;
     m1(1, 1) = 4;
+    Matrix m2(m1);
+    Matrix m3 = m2 + m1;
+    Matrix m4 = m2 - m1;
+    Matrix m5 = m2 * m1;
+    Matrix m6;
     cout << m1 << endl;
+    cout << m2 << endl;
+    cout << m3 << endl;
+    cout << m4 << endl;
+    cout << m5 << endl;
+    cout << m6 << endl;
 }

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Matrix::Matrix(size_t rows = 1, size_t cols = 1){
+Matrix::Matrix(size_t rows, size_t cols){
     this->rows = rows;
     this->cols = cols;
     this->matrix = new double*[rows];
@@ -44,21 +44,9 @@ double** Matrix::getMatrix() const{
     return this->matrix;
 }
 
-void Matrix::setRows(size_t rows){
-    this->rows = rows;
-}
-
-void Matrix::setCols(size_t cols){
-    this->cols = cols;
-}
-
-void Matrix::setMatrix(double** matrix){
-    this->matrix = matrix;
-}
-
 Matrix Matrix::operator+(const Matrix& m) const{
     if(this->rows != m.rows || this->cols != m.cols){
-        throw "Matrices are not the same size!";
+        throw IncompatibleMatrixDimensionsException();
     }
     Matrix result(this->rows, this->cols);
     for(size_t i = 0; i < this->rows; i++){
@@ -71,7 +59,7 @@ Matrix Matrix::operator+(const Matrix& m) const{
 
 Matrix Matrix::operator-(const Matrix& m) const{
     if(this->rows != m.rows || this->cols != m.cols){
-        throw "Matrices are not the same size!";
+        throw IncompatibleMatrixDimensionsException();
     }
     Matrix result(this->rows, this->cols);
     for(size_t i = 0; i < this->rows; i++){
@@ -84,7 +72,7 @@ Matrix Matrix::operator-(const Matrix& m) const{
 
 Matrix Matrix::operator*(const Matrix& m) const{
     if(this->cols != m.rows){
-        throw "Matrices are not compatible for multiplication!";
+        throw IncompatibleMatrixDimensionsException();
     }
     Matrix result(this->rows, m.cols);
     for(size_t i = 0; i < this->rows; i++){
@@ -120,7 +108,7 @@ Matrix Matrix::operator=(const Matrix& m){
 
 Matrix Matrix::operator+=(const Matrix& m){
     if(this->rows != m.rows || this->cols != m.cols){
-        throw "Matrices are not the same size!";
+        throw IncompatibleMatrixDimensionsException();
     }
     for(size_t i = 0; i < this->rows; i++){
         for(size_t j = 0; j < this->cols; j++){
@@ -132,7 +120,7 @@ Matrix Matrix::operator+=(const Matrix& m){
 
 Matrix Matrix::operator-=(const Matrix& m){
     if(this->rows != m.rows || this->cols != m.cols){
-        throw "Matrices are not the same size!";
+        throw IncompatibleMatrixDimensionsException();
     }
     for(size_t i = 0; i < this->rows; i++){
         for(size_t j = 0; j < this->cols; j++){
@@ -144,7 +132,7 @@ Matrix Matrix::operator-=(const Matrix& m){
 
 Matrix Matrix::operator*=(const Matrix& m){
     if(this->cols != m.rows){
-        throw "Matrices are not compatible for multiplication!";
+      throw IncompatibleMatrixDimensionsException();
     }
     Matrix result(this->rows, m.cols);
     for(size_t i = 0; i < this->rows; i++){
@@ -160,7 +148,7 @@ Matrix Matrix::operator*=(const Matrix& m){
 
 double& Matrix::operator()(size_t row, size_t col){
     if(row >= this->rows || col >= this->cols){
-        throw "Index out of bounds!";
+        throw InvalidMatrixIndexException();
     }
     return this->matrix[row][col];
 }

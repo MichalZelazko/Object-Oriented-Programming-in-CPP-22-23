@@ -20,12 +20,12 @@ void ComplexNumber::setReal(double newReal)
 	this->real = newReal;
 }
 
-double ComplexNumber::getImaginary()
+double ComplexNumber::getImaginary() const
 {
 	return this->imaginary;
 }
 
-double ComplexNumber::getReal()
+double ComplexNumber::getReal() const
 {
 	return this->real;
 }
@@ -146,12 +146,12 @@ bool operator!=(ComplexNumber c1, ComplexNumber c2)
 	}
 }
 
-double ComplexNumber::magnitude()
+double ComplexNumber::magnitude() const
 {
 	return(sqrt(pow(this->real, 2) + pow(this->imaginary, 2)));
 }
 
-double ComplexNumber::phase()
+double ComplexNumber::phase() const
 {
     if(this->imaginary != 0 || this->real > 0){
         return(2*atan(this->imaginary / (this->magnitude() + this->real)));
