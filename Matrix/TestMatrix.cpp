@@ -12,11 +12,13 @@ int main(){
     Matrix m3 = m2 + m1;
     Matrix m4 = m2 - m1;
     Matrix m5 = m2 * m1;
-    Matrix m6;
+    const Matrix m6(m1);
+    Matrix m7("matrix.txt");
     cout << m1 << endl;
     cout << m2 << endl;
     cout << m3 << endl;
     cout << m4 << endl;
     cout << m5 << endl;
-    cout << m6 << endl;
+    cout << m6(0, 1) << endl;
+    cout << m7 << endl;
 }

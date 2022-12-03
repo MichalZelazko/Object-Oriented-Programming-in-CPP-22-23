@@ -3,190 +3,175 @@
 using namespace std;
 
 Matrix::Matrix(size_t rows, size_t cols){
-    this->rows = rows;
-    this->cols = cols;
-    this->matrix = new double*[rows];
-    for(size_t i = 0; i < rows; i++){
-        this->matrix[i] = new double[cols];
+    data = new MatrixData(rows, cols);
+}
+
+Matrix::Matrix(string fileName){
+    ifstream file;
+    file.open(fileName);
+    if(!file.is_open()){
+        throw runtime_error("File not found");
     }
+    size_t rows, cols;
+    file >> rows >> cols;
+    data = new MatrixData(rows, cols);
+    for(size_t i = 0; i < rows; i++){
+        for(size_t j = 0; j < cols; j++){
+            if(file.eof()){
+                file.close();
+                throw runtime_error("File too short for given matrix size");
+            }
+            file >> data->matrix[i][j];
+        }
+    }
+    file.close();
 }
 
 Matrix::Matrix(const Matrix& m){
-    this->rows = m.rows;
-    this->cols = m.cols;
-    this->matrix = new double*[rows];
-    for(size_t i = 0; i < rows; i++){
-        this->matrix[i] = new double[cols];
-    }
-    for(size_t i = 0; i < rows; i++){
-        for(size_t j = 0; j < cols; j++){
-            this->matrix[i][j] = m.matrix[i][j];
-        }
-    }
+    m.data->refCount++;
+    data = m.data;
 }
 
 Matrix::~Matrix(){
-    for(size_t i = 0; i < rows; i++){
-        delete[] this->matrix[i];
+    if(--data->refCount == 0){
+        delete data;
     }
-    delete[] this->matrix;
 }
 
 size_t Matrix::getRows() const{
-    return this->rows;
+    return data->rows;
 }
 
 size_t Matrix::getCols() const{
-    return this->cols;
+    return data->cols;
 }
 
 double** Matrix::getMatrix() const{
-    return this->matrix;
+    return data->matrix;
 }
 
-Matrix Matrix::operator+(const Matrix& m) const{
-    if(this->rows != m.rows || this->cols != m.cols){
+Matrix operator+(const Matrix& m1, const Matrix& m2){
+    if(m1.getRows() != m2.getRows() || m1.getCols() != m2.getCols()){
         throw IncompatibleMatrixDimensionsException();
     }
-    Matrix result(this->rows, this->cols);
-    for(size_t i = 0; i < this->rows; i++){
-        for(size_t j = 0; j < this->cols; j++){
-            result.matrix[i][j] = this->matrix[i][j] + m.matrix[i][j];
+    Matrix newMatrix(m1.getRows(), m1.getCols());
+    for(size_t i = 0; i < newMatrix.getRows(); i++){
+        for(size_t j = 0; j < newMatrix.getCols(); j++){
+            newMatrix.data->matrix[i][j] = m1.data->matrix[i][j] + m2.data->matrix[i][j];
         }
     }
-    return result;
+    return newMatrix;
 }
 
-Matrix Matrix::operator-(const Matrix& m) const{
-    if(this->rows != m.rows || this->cols != m.cols){
+Matrix operator-(const Matrix& m1, const Matrix& m2){
+    if(m1.getRows() != m2.getRows() || m1.getCols() != m2.getCols()){
         throw IncompatibleMatrixDimensionsException();
     }
-    Matrix result(this->rows, this->cols);
-    for(size_t i = 0; i < this->rows; i++){
-        for(size_t j = 0; j < this->cols; j++){
-            result.matrix[i][j] = this->matrix[i][j] - m.matrix[i][j];
+    Matrix newMatrix(m1.getRows(), m1.getCols());
+    for(size_t i = 0; i < newMatrix.getRows(); i++){
+        for(size_t j = 0; j < newMatrix.getCols(); j++){
+            newMatrix.data->matrix[i][j] = m1.data->matrix[i][j] - m2.data->matrix[i][j];
         }
     }
-    return result;
+    return newMatrix;
 }
 
-Matrix Matrix::operator*(const Matrix& m) const{
-    if(this->cols != m.rows){
+Matrix operator*(const Matrix& m1, const Matrix& m2){
+    if(m1.getCols() != m2.getRows()){
         throw IncompatibleMatrixDimensionsException();
     }
-    Matrix result(this->rows, m.cols);
-    for(size_t i = 0; i < this->rows; i++){
-        for(size_t j = 0; j < m.cols; j++){
-            for(size_t k = 0; k < this->cols; k++){
-                result.matrix[i][j] += this->matrix[i][k] * m.matrix[k][j];
+    Matrix newMatrix(m1.getRows(), m2.getCols());
+    for(size_t i = 0; i < newMatrix.getRows(); i++){
+        for(size_t j = 0; j < newMatrix.getCols(); j++){
+            newMatrix.data->matrix[i][j] = 0;
+            for(size_t k = 0; k < m1.getCols(); k++){
+                newMatrix.data->matrix[i][j] += m1.data->matrix[i][k] * m2.data->matrix[k][j];
             }
         }
     }
-    return result;
+    return newMatrix;
 }
 
-Matrix Matrix::operator=(const Matrix& m){
-    if(this->rows != m.rows || this->cols != m.cols){
-        for(size_t i = 0; i < this->rows; i++){
-            delete[] this->matrix[i];
+Matrix& Matrix::operator=(const Matrix& m){
+    if(this != &m){
+        if(--data->refCount == 0){
+            delete data;
         }
-        delete[] this->matrix;
-        this->rows = m.rows;
-        this->cols = m.cols;
-        this->matrix = new double*[rows];
-        for(size_t i = 0; i < rows; i++){
-            this->matrix[i] = new double[cols];
-        }
+        m.data->refCount++;
+        data = m.data;
     }
-    for(size_t i = 0; i < this->rows; i++){
-        for(size_t j = 0; j < this->cols; j++){
-            this->matrix[i][j] = m.matrix[i][j];
+    return *this;
+}
+
+Matrix& Matrix::operator+=(const Matrix& m){
+    for(size_t i = 0; i < data->rows; i++){
+        for(size_t j = 0; j < data->cols; j++){
+            data->matrix[i][j] += m.data->matrix[i][j];
         }
     }
     return *this;
 }
 
-Matrix Matrix::operator+=(const Matrix& m){
-    if(this->rows != m.rows || this->cols != m.cols){
-        throw IncompatibleMatrixDimensionsException();
-    }
-    for(size_t i = 0; i < this->rows; i++){
-        for(size_t j = 0; j < this->cols; j++){
-            this->matrix[i][j] += m.matrix[i][j];
+Matrix& Matrix::operator-=(const Matrix& m){
+    for(size_t i = 0; i < data->rows; i++){
+        for(size_t j = 0; j < data->cols; j++){
+            data->matrix[i][j] -= m.data->matrix[i][j];
         }
     }
     return *this;
 }
 
-Matrix Matrix::operator-=(const Matrix& m){
-    if(this->rows != m.rows || this->cols != m.cols){
-        throw IncompatibleMatrixDimensionsException();
-    }
-    for(size_t i = 0; i < this->rows; i++){
-        for(size_t j = 0; j < this->cols; j++){
-            this->matrix[i][j] -= m.matrix[i][j];
-        }
-    }
-    return *this;
-}
-
-Matrix Matrix::operator*=(const Matrix& m){
-    if(this->cols != m.rows){
-      throw IncompatibleMatrixDimensionsException();
-    }
-    Matrix result(this->rows, m.cols);
-    for(size_t i = 0; i < this->rows; i++){
-        for(size_t j = 0; j < m.cols; j++){
-            for(size_t k = 0; k < this->cols; k++){
-                result.matrix[i][j] += this->matrix[i][k] * m.matrix[k][j];
-            }
-        }
-    }
-    *this = result;
+Matrix& Matrix::operator*=(const Matrix& m){
+    Matrix newMatrix = *this * m;
+    *this = newMatrix;
     return *this;
 }
 
 double& Matrix::operator()(size_t row, size_t col){
-    if(row >= this->rows || col >= this->cols){
-        throw InvalidMatrixIndexException();
-    }
-    return this->matrix[row][col];
+    return data->matrix[row][col];
 }
 
-bool Matrix::operator==(const Matrix& m) const{
-    if(this->rows != m.rows || this->cols != m.cols){
-        return false;
-    }
-    for(size_t i = 0; i < this->rows; i++){
-        for(size_t j = 0; j < this->cols; j++){
-            if(this->matrix[i][j] != m.matrix[i][j]){
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-bool Matrix::operator!=(const Matrix& m) const{
-    if(this->rows != m.rows || this->cols != m.cols){
-        return true;
-    }
-    for(size_t i = 0; i < this->rows; i++){
-        for(size_t j = 0; j < this->cols; j++){
-            if(this->matrix[i][j] != m.matrix[i][j]){
-                return true;
-            }
-        }
-    }
-    return false;
+double Matrix::operator()(size_t row, size_t col) const{
+    return data->matrix[row][col];
 }
 
 ostream& operator<<(ostream& os, const Matrix& m){
-    for(size_t i = 0; i < m.rows; i++){
-        for(size_t j = 0; j < m.cols; j++){
-            os << m.matrix[i][j] << " ";
+    for(size_t i = 0; i < m.data->rows; i++){
+        for(size_t j = 0; j < m.data->cols; j++){
+            os << m.data->matrix[i][j] << " ";
         }
         os << endl;
     }
     return os;
+}
+
+Matrix::MatrixData::MatrixData(size_t newRows, size_t newCols){
+    rows = newRows;
+    cols = newCols;
+    refCount = 1;
+    matrix = new double*[rows];
+    for(size_t i = 0; i < rows; i++){
+        this->matrix[i] = new double[cols];
+    }
+}
+    
+Matrix::MatrixData::~MatrixData(){
+    for(size_t i = 0; i < rows; i++){
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+}
+    
+Matrix::MatrixData* Matrix::MatrixData::detach(){
+    if(refCount == 1){
+        return this;
+    }
+    MatrixData* newData = new MatrixData(rows, cols);
+    for(size_t i = 0; i < rows; i++){
+        for(size_t j = 0; j < cols; j++){
+            newData->matrix[i][j] = matrix[i][j];
+        }
+    }
+    refCount--;
+    return newData;
 }
