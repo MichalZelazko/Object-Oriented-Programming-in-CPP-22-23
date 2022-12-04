@@ -10,7 +10,7 @@ Matrix::Matrix(string fileName){
     ifstream file;
     file.open(fileName);
     if(!file.is_open()){
-        throw runtime_error("File not found");
+        throw FileNotOpenException();
     }
     size_t rows, cols;
     file >> rows >> cols;
@@ -19,7 +19,7 @@ Matrix::Matrix(string fileName){
         for(size_t j = 0; j < cols; j++){
             if(file.eof()){
                 file.close();
-                throw runtime_error("File too short for given matrix size");
+                throw InvalidDataFromFileException();
             }
             file >> data->matrix[i][j];
         }
@@ -28,12 +28,12 @@ Matrix::Matrix(string fileName){
 }
 
 Matrix::Matrix(const Matrix& m){
-    m.data->refCount++;
+    m.data->refNum++;
     data = m.data;
 }
 
 Matrix::~Matrix(){
-    if(--data->refCount == 0){
+    if(--data->refNum == 0){
         delete data;
     }
 }
@@ -94,10 +94,10 @@ Matrix operator*(const Matrix& m1, const Matrix& m2){
 
 Matrix& Matrix::operator=(const Matrix& m){
     if(this != &m){
-        if(--data->refCount == 0){
+        if(--data->refNum == 0){
             delete data;
         }
-        m.data->refCount++;
+        m.data->refNum++;
         data = m.data;
     }
     return *this;
@@ -127,11 +127,10 @@ Matrix& Matrix::operator*=(const Matrix& m){
     return *this;
 }
 
-double& Matrix::operator()(size_t row, size_t col){
-    return data->matrix[row][col];
-}
-
 double Matrix::operator()(size_t row, size_t col) const{
+    if(row < 0 || row >= data->rows || col < 0 || col >= data->cols ){
+        throw InvalidMatrixIndexException();
+    }
     return data->matrix[row][col];
 }
 
@@ -148,7 +147,7 @@ ostream& operator<<(ostream& os, const Matrix& m){
 Matrix::MatrixData::MatrixData(size_t newRows, size_t newCols){
     rows = newRows;
     cols = newCols;
-    refCount = 1;
+    refNum = 1;
     matrix = new double*[rows];
     for(size_t i = 0; i < rows; i++){
         this->matrix[i] = new double[cols];
@@ -163,7 +162,7 @@ Matrix::MatrixData::~MatrixData(){
 }
     
 Matrix::MatrixData* Matrix::MatrixData::detach(){
-    if(refCount == 1){
+    if(refNum == 1){
         return this;
     }
     MatrixData* newData = new MatrixData(rows, cols);
@@ -172,6 +171,26 @@ Matrix::MatrixData* Matrix::MatrixData::detach(){
             newData->matrix[i][j] = matrix[i][j];
         }
     }
-    refCount--;
+    refNum--;
     return newData;
+}
+
+MatrixReference Matrix::operator()(size_t row, size_t col){
+	if (this->data->rows < row || this->data->cols < col ||
+		row < 0 || col < 0) {
+		throw InvalidMatrixIndexException();
+	}
+	return MatrixReference(this, row, col);
+}
+
+MatrixReference::MatrixReference(Matrix* matrix, size_t rows, size_t cols)
+{
+	this->matrix = matrix;
+	this->rows = rows;
+	this->cols = cols;
+}
+
+MatrixReference::operator double() const
+{
+	return this->matrix->read(this->rows, this->cols);
 }
