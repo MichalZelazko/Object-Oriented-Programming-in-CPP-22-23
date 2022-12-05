@@ -20,12 +20,12 @@ void testReadingFromFile();
 void testBracesOperator();
 
 int main(){
-    //testCompoundOperators();
-    //testRegularOperators();
+    testCompoundOperators();
+    testRegularOperators();
     testExceptions();
-    //testReferenceCounting();
-    //testReadingFromFile();
-    //testBracesOperator();
+    testReferenceCounting();
+    testReadingFromFile();
+    testBracesOperator();
 }
 
 void testCompoundOperators(){
