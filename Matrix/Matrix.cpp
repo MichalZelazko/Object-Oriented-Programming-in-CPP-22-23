@@ -142,11 +142,17 @@ Matrix& Matrix::operator*=(const Matrix& m){
     return *this;
 }
 
-double Matrix::operator()(size_t row, size_t col) const{
-    if(row < 0 || row >= data->rows || col < 0 || col >= data->cols ){
-        throw InvalidMatrixIndexException();
-    }
-    return this->read(row, col);
+
+MatrixReference Matrix::operator()(size_t row, size_t col){
+	if(row < 0 || row >= data->rows || col < 0 || col >= data->cols ){
+		throw InvalidMatrixIndexException();
+	}
+	return MatrixReference(this, row, col);
+}
+
+double Matrix::read(size_t row, size_t col) const{
+    
+    return data->matrix[row][col];
 }
 
 bool operator==(const Matrix& m1, const Matrix& m2){
@@ -177,10 +183,6 @@ ostream& operator<<(ostream& os, const Matrix& m){
     return os;
 }
 
-double Matrix::read(size_t row, size_t col) const{
-    
-    return data->matrix[row][col];
-}
 
 void Matrix::write(size_t row, size_t col, double value){
     data = data->detach();
@@ -224,13 +226,6 @@ MatrixReference::MatrixReference(Matrix* matrix, size_t rows, size_t cols)
 	this->matrix = matrix;
 	this->rows = rows;
 	this->cols = cols;
-}
-
-MatrixReference Matrix::operator()(size_t row, size_t col){
-	if(row < 0 || row >= data->rows || col < 0 || col >= data->cols ){
-		throw InvalidMatrixIndexException();
-	}
-	return MatrixReference(this, row, col);
 }
 
 MatrixReference::operator double() const

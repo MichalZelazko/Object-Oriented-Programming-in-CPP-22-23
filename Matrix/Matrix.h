@@ -41,8 +41,6 @@ class Matrix{
     private:
         struct MatrixData;
         MatrixData* data;
-        static Matrix multiplyByNumber(const Matrix& m, double number);
-        static Matrix multiplyByMatrix(const Matrix& m1, const Matrix& m2);
     public:
         friend class MatrixReference;
         Matrix(size_t rows = 1, size_t cols = 1);
@@ -55,12 +53,13 @@ class Matrix{
         friend Matrix operator+(const Matrix& m1, const Matrix& m2);
         friend Matrix operator-(const Matrix& m1, const Matrix& m2);
         friend Matrix operator*(const Matrix& m1, const Matrix& m2);
+        static Matrix multiplyByNumber(const Matrix& m, double number);
+        static Matrix multiplyByMatrix(const Matrix& m1, const Matrix& m2);
         Matrix& operator=(const Matrix& m);
         Matrix& operator+=(const Matrix& m);
         Matrix& operator-=(const Matrix& m);
         Matrix& operator*=(const Matrix& m);
         MatrixReference operator()(size_t row, size_t col);
-        double operator()(size_t row, size_t col) const;
         friend bool operator==(const Matrix& m1, const Matrix& m2);
         friend bool operator!=(const Matrix& m1, const Matrix& m2);
         friend ostream& operator<<(ostream& os, const Matrix& m);
