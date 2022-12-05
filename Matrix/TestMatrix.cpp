@@ -19,7 +19,8 @@ void testReferenceCounting();
 void testReadingFromFile();
 void testBracesOperator();
 
-int main(){
+int main()
+{
     testCompoundOperators();
     testRegularOperators();
     testExceptions();
@@ -28,14 +29,16 @@ int main(){
     testBracesOperator();
 }
 
-void testCompoundOperators(){
+void testCompoundOperators()
+{
     cout << "\n--------------Testing compound operators--------------" << endl;
     testCompoundAddition();
     testCompoundSubtraction();
     testCompoundMultiplication();
 }
 
-void testCompoundAddition(){
+void testCompoundAddition()
+{
     Matrix m1(2, 2);
     m1(0, 0) = 1;
     m1(0, 1) = 2;
@@ -52,15 +55,16 @@ void testCompoundAddition(){
     m3(1, 0) = 10;
     m3(1, 1) = 12;
     m1 += m2;
-    if(m1 == m3){
+    if (m1 == m3) {
         cout << "Compound addition test passed" << endl;
     }
-    else{
+    else {
         cout << "Compound addition test failed" << endl;
     }
 }
 
-void testCompoundSubtraction(){
+void testCompoundSubtraction()
+{
     Matrix m1(2, 2);
     m1(0, 0) = 1;
     m1(0, 1) = 2;
@@ -77,15 +81,16 @@ void testCompoundSubtraction(){
     m3(1, 0) = -4;
     m3(1, 1) = -4;
     m1 -= m2;
-    if(m1 == m3){
+    if (m1 == m3) {
         cout << "Compound subtraction test passed" << endl;
     }
-    else{
+    else {
         cout << "Compound subtraction test failed" << endl;
     }
 }
 
-void testCompoundMultiplication(){
+void testCompoundMultiplication()
+{
     Matrix m1(2, 2);
     m1(0, 0) = 1;
     m1(0, 1) = 2;
@@ -102,22 +107,24 @@ void testCompoundMultiplication(){
     m3(1, 0) = 43;
     m3(1, 1) = 50;
     m1 *= m2;
-    if(m1 == m3){
+    if (m1 == m3) {
         cout << "Compound multiplication test passed" << endl;
     }
-    else{
+    else {
         cout << "Compound multiplication test failed" << endl;
     }
 }
 
-void testRegularOperators(){
+void testRegularOperators()
+{
     cout << "\n--------------Testing regular operators--------------" << endl;
     testAddition();
     testSubtraction();
     testMultiplication();
 }
 
-void testAddition(){
+void testAddition()
+{
     Matrix m1(2, 2);
     m1(0, 0) = 1;
     m1(0, 1) = 2;
@@ -134,15 +141,16 @@ void testAddition(){
     m3(1, 0) = 10;
     m3(1, 1) = 12;
     Matrix m4 = m1 + m2;
-    if(m4 == m3){
+    if (m4 == m3) {
         cout << "Addition test passed" << endl;
     }
-    else{
+    else {
         cout << "Addition test failed" << endl;
     }
 }
 
-void testSubtraction(){
+void testSubtraction()
+{
     Matrix m1(2, 2);
     m1(0, 0) = 1;
     m1(0, 1) = 2;
@@ -158,16 +166,18 @@ void testSubtraction(){
     m3(0, 1) = -4;
     m3(1, 0) = -4;
     m3(1, 1) = -4;
-    Matrix m4 = m1 - m2;
-    if(m4 == m3){
+    Matrix m4;
+    m4 = m1 - m2;
+    if (m4 == m3) {
         cout << "Subtraction test passed" << endl;
     }
-    else{
+    else {
         cout << "Subtraction test failed" << endl;
     }
 }
 
-void testMultiplication(){
+void testMultiplication()
+{
     Matrix m1(2, 2);
     m1(0, 0) = 1;
     m1(0, 1) = 2;
@@ -184,15 +194,16 @@ void testMultiplication(){
     m3(1, 0) = 43;
     m3(1, 1) = 50;
     Matrix m4 = m1 * m2;
-    if(m4 == m3){
+    if (m4 == m3) {
         cout << "Multiplication test passed" << endl;
     }
-    else{
+    else {
         cout << "Multiplication test failed" << endl;
     }
 }
 
-void testExceptions(){
+void testExceptions()
+{
     cout << "\n--------------Testing exceptions--------------" << endl;
     testIncompatibleMatrixDimensionsException();
     testInvalidMatrixIndexException();
@@ -200,66 +211,76 @@ void testExceptions(){
     testInvalidDataFromFileException();
 }
 
-void testIncompatibleMatrixDimensionsException(){
+void testIncompatibleMatrixDimensionsException()
+{
     Matrix m1(2, 2);
     Matrix m2(3, 3);
-    try{
+    try {
         m1 += m2;
         cout << "Incompatible matrix dimensions exception test failed" << endl;
     }
-    catch(IncompatibleMatrixDimensionsException& e){
+    catch (IncompatibleMatrixDimensionsException& e) {
         cout << "Incompatible matrix dimensions exception test passed" << endl;
     }
 }
 
-void testInvalidMatrixIndexException(){
+void testInvalidMatrixIndexException()
+{
     Matrix m1(2, 2);
-    try{
+    try {
         m1(2, 2);
         cout << "Invalid matrix index exception test failed" << endl;
     }
-    catch(InvalidMatrixIndexException& e){
+    catch (InvalidMatrixIndexException& e) {
         cout << "Invalid matrix index exception test passed" << endl;
     }
 }
 
-void testFileNotOpenException(){
-    try{
+void testFileNotOpenException()
+{
+    try {
         Matrix m1("file.txt");
         cout << "File not open exception test failed" << endl;
     }
-    catch(FileNotOpenException& e){
+    catch (FileNotOpenException& e) {
         cout << "File not open exception test passed" << endl;
     }
 }
 
-void testInvalidDataFromFileException(){
-    try{
+void testInvalidDataFromFileException()
+{
+    try {
         Matrix m1("invalidMatrix.txt");
         cout << "Invalid data from file exception test failed" << endl;
     }
-    catch(InvalidDataFromFileException& e){
+    catch (InvalidDataFromFileException& e) {
         cout << "Invalid data from file exception test passed" << endl;
     }
 }
 
-void testReferenceCounting(){
+void testReferenceCounting()
+{
     cout << "\n--------------Testing reference counting--------------" << endl;
     Matrix m1(2, 2);
     m1(0, 0) = 1;
     Matrix m2(3, 3);
     m2(0, 0) = 2;
-    m1 = m2;
     Matrix m3(m1);
-    if(m1.getReferences() == 3){
+    Matrix m4(m1);
+    m2 = m1;
+    if (m1.getReferences() == 4) {
+        m2(0, 0) = 4;
+    }
+    if (m1.getReferences() == 3) {
         cout << "Reference counting test passed" << endl;
     }
-    else{
+    else {
         cout << "Reference counting test failed" << endl;
     }
 }
 
-void testReadingFromFile(){
+void testReadingFromFile()
+{
     cout << "\n--------------Testing reading from file--------------" << endl;
     Matrix m1("matrix.txt");
     cout << "Rows: " << m1.getRows() << ", cols: " << m1.getCols() << endl;
@@ -267,17 +288,18 @@ void testReadingFromFile(){
     cout << "Reading from file test passed" << endl;
 }
 
-void testBracesOperator(){
+void testBracesOperator()
+{
     cout << "\n--------------Testing () operator--------------" << endl;
     Matrix m1(2, 2);
     m1(0, 0) = 1;
     m1(0, 1) = 2;
     m1(1, 0) = 3;
     m1(1, 1) = 4;
-    if(m1(0, 0) == 1 && m1(0, 1) == 2 && m1(1, 0) == 3 && m1(1, 1) == 4){
+    if (m1(0, 0) == 1 && m1(0, 1) == 2 && m1(1, 0) == 3 && m1(1, 1) == 4) {
         cout << "() operator test passed" << endl;
     }
-    else{
+    else {
         cout << "() operator test failed" << endl;
     }
 }
