@@ -5,28 +5,32 @@
 
 using namespace std;
 
-class IncompatibleMatrixDimensionsException : public std::exception {
+class Matrix;
+class MatrixReference;
+
+
+class IncompatibleMatrixDimensionsException : public exception {
     public:
         const char * what () const throw() {
             return "Matrices are of incompatible sizes";
         }
 };
 
-class InvalidMatrixIndexException : public std::exception {
+class InvalidMatrixIndexException : public exception {
     public:
         const char * what () const throw() {
             return "Index out of matrix's bounds";
         }
 };
 
-class FileNotOpenException : public std::exception {
+class FileNotOpenException : public exception {
     public:
         const char * what () const throw() {
             return "Couldn't open file";
         }
 };
 
-class InvalidDataFromFileException : public std::exception {
+class InvalidDataFromFileException : public exception {
     public:
         const char * what () const throw() {
             return "File too short for given matrix size";
@@ -37,6 +41,8 @@ class Matrix{
     private:
         struct MatrixData;
         MatrixData* data;
+        static Matrix multiplyByNumber(const Matrix& m, double number);
+        static Matrix multiplyByMatrix(const Matrix& m1, const Matrix& m2);
     public:
         friend class MatrixReference;
         Matrix(size_t rows = 1, size_t cols = 1);
@@ -45,8 +51,7 @@ class Matrix{
         ~Matrix();
         size_t getRows() const;
         size_t getCols() const;
-        size_t getRefNum() const;
-        double** getMatrix() const;
+        size_t getReferences() const;
         friend Matrix operator+(const Matrix& m1, const Matrix& m2);
         friend Matrix operator-(const Matrix& m1, const Matrix& m2);
         friend Matrix operator*(const Matrix& m1, const Matrix& m2);
@@ -56,8 +61,8 @@ class Matrix{
         Matrix& operator*=(const Matrix& m);
         MatrixReference operator()(size_t row, size_t col);
         double operator()(size_t row, size_t col) const;
-        bool operator==(const Matrix& m) const;
-        bool operator!=(const Matrix& m) const;
+        friend bool operator==(const Matrix& m1, const Matrix& m2);
+        friend bool operator!=(const Matrix& m1, const Matrix& m2);
         friend ostream& operator<<(ostream& os, const Matrix& m);
         double read(size_t row, size_t col) const;
         void write(size_t row, size_t col, double value);
@@ -67,7 +72,7 @@ struct Matrix::MatrixData{
     size_t rows;
     size_t cols;
     double** matrix;
-    size_t refNum;
+    size_t references;
 
     MatrixData(size_t newRows, size_t newCols);
     ~MatrixData();
