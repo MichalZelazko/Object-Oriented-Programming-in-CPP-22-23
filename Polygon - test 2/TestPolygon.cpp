@@ -6,10 +6,10 @@ int main(){
     Point point1;
     point1.x = 1.5;
     point1.y = 2;
-    cout << "point 1: " << endl << point1 << endl;
+    cout << "point 1: " << point1 << endl;
 
     Point point2(5.5, 2);
-    cout << "point 2: " << endl << point2 << endl;
+    cout << "point 2: " << point2 << endl;
 
     Polygon polygon1;
     polygon1.add(point1);

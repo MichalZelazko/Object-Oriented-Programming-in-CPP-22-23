@@ -13,7 +13,6 @@ class Polygon{
         Polygon(const Polygon& poly);
         Polygon& operator=(const Polygon& poly);
         ~Polygon();
-        friend class Point;
         Polygon& add(Point p);
         friend ostream& operator<<(ostream& os, const Polygon& poly);
         friend Polygon operator+(const Polygon& poly, const Point& p);
