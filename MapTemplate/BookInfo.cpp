@@ -34,6 +34,11 @@ BookInfo& BookInfo::operator=(const BookInfo& bookInfo) {
 BookInfo::~BookInfo() {}
 
 ostream& operator<<(ostream& os, const BookInfo& bookInfo) {
-  os << "Author: " << bookInfo.author << ", category: " << bookInfo.category << ", number of pages: " << bookInfo.numberOfPages << ", is available: " << bookInfo.isAvailable << endl;
+  os << "Author: " << bookInfo.author << ", category: " << bookInfo.category << ", number of pages: " << bookInfo.numberOfPages << ", status: ";
+  if (bookInfo.isAvailable) {
+    os << "on the bookshelf"; 
+  } else {
+    os << "borrowed";
+  }
   return os;
 }

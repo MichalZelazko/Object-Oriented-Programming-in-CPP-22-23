@@ -28,6 +28,6 @@ Employee& Employee::operator=(const Employee& employee) {
 Employee::~Employee() {}
 
 ostream& operator<<(ostream& os, const Employee& employee) {
-  os << "Name: " << employee.name << ", position: " << employee.position << ", age: " << employee.age << endl;
+  os << "Name: " << employee.name << ", position: " << employee.position << ", age: " << employee.age;
   return os;
 }

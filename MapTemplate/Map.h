@@ -11,6 +11,13 @@ class KeyAlreadyExistsException : public exception {
     }
 };
 
+class KeyNotFoundException : public exception {
+  public:
+    const char* what() const throw() {
+      return "Key not found";
+    }
+};
+
 template <class Key, class T> class Map {
   public:
     Key* keys;
@@ -22,6 +29,7 @@ template <class Key, class T> class Map {
     Map& operator=(const Map<Key, T>& map);
     ~Map();
     void add(Key key, T value);
+    void remove(Key key);
     T* find(Key key);
   private:
     void resize();
@@ -89,6 +97,20 @@ template <class Key, class T> T* Map<Key, T>::find(Key key) {
     }
   }
   return 0;
+}
+
+template <class Key, class T> void Map<Key, T>::remove(Key key) {
+  for (int i = 0; i < this->size; i++) {
+    if (this->keys[i] == key) {
+      for (int j = i; j < this->size - 1; j++) {
+        this->keys[j] = this->keys[j + 1];
+        this->values[j] = this->values[j + 1];
+      }
+      this->size--;
+      return;
+    }
+  }
+  throw KeyNotFoundException();
 }
 
 template <class Key, class T> ostream& operator<<(ostream& os, const Map<Key, T>& map) {
