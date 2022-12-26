@@ -35,7 +35,6 @@ void testEmployeesDatabase() {
 	cout << "Modified database:" << endl << newDatabase << endl;
 
 	database = newDatabase;												// Update original database
-
 	cout << "Database after the assignment:" << endl << database << endl;
 }
 
@@ -50,7 +49,6 @@ void modifyEmployees(Database& database) {
 
 	employeePtr = database.find(510212881);								// Find employee using its ID
 	employeePtr->position = "salesman";									// Modify the position of employee
-	
 	employeePtr = database.find(761028073);								// Find employee using its ID
 	employeePtr->age = 29;												// Modify the age of employee
 }
