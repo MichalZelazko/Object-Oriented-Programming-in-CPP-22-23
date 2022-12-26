@@ -58,48 +58,37 @@ void modifyEmployees(Database& database) {
 void testBooksLibrary() {
 	Library library;
 	addBooks(library);
-
 	Library newLibrary = library;
 	try {
 		newLibrary.add("C++ Primer", BookInfo("Barbara E. Moo", "educational", 725, false));
+		cout << "Trying to add a book with the same title as an existing book: ";
 		newLibrary.add("C++ Primer", BookInfo("Stephen Prata", "educational", 864, true));
-	}
-	catch (KeyAlreadyExistsException& e) {
+	} catch (KeyAlreadyExistsException& e) {
 		cout << e.what() << endl;
 	}
 	modifyBooks(newLibrary);
-
 	cout << "Original library:" << endl << library << endl;
 	cout << "Modified library:" << endl << newLibrary << endl;
-
-	try {
-		newLibrary.remove("Effective C++");
+	newLibrary.remove("Effective C++");
+	cout << "Library after removing a book:" << endl << newLibrary << endl;
+	try{
+		cout << "Trying to remove a non-existent book: ";
 		newLibrary.remove("Non existent book");
 	} catch (KeyNotFoundException& e) {
 		cout << e.what() << endl;
 	}
-
-	cout << "Library after removing a book:" << endl << newLibrary << endl;
-
 	library = newLibrary;
-
 	cout << "Library after the assignment:" << endl << library << endl;
 }
 
 void addBooks(Library& library) {
-	try{
-		library.add("The C++ Programming Language", BookInfo("Bjarne Stroustrup", "educational", 1324, true));
-		library.add("The C++ Standard Library", BookInfo("Nicolai Josuttis", "educational", 1152, false));
-		library.add("Effective C++", BookInfo("Scott Meyers", "educational", 352, true));
-	}
-	catch (KeyAlreadyExistsException& e) {
-		cout << e.what() << endl;
-	}
+	library.add("The C++ Programming Language", BookInfo("Bjarne Stroustrup", "educational", 1324, true));
+	library.add("The C++ Standard Library", BookInfo("Nicolai Josuttis", "educational", 1152, false));
+	library.add("Effective C++", BookInfo("Scott Meyers", "educational", 352, true));
 }
 
 void modifyBooks(Library& library) {
 	BookInfo* bookInfoPtr;
-
 	bookInfoPtr = library.find("The C++ Programming Language");
 	bookInfoPtr->isAvailable = false;
 	bookInfoPtr = library.find("The C++ Standard Library");

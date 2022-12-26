@@ -7,14 +7,14 @@ using namespace std;
 class KeyAlreadyExistsException : public exception {
   public:
     const char* what() const throw() {
-      return "Key already exists";
+      return "Key already exists\n";
     }
 };
 
 class KeyNotFoundException : public exception {
   public:
     const char* what() const throw() {
-      return "Key not found";
+      return "Key not found\n";
     }
 };
 
