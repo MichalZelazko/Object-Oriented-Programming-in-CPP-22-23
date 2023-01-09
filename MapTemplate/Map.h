@@ -20,6 +20,7 @@ class KeyNotFoundException : public exception {
 
 template <class Key, class T> class Map {
   public:
+    // should store Key and Value in a struct and make an array of structs
     Key* keys;
     T* values;
     int size;
